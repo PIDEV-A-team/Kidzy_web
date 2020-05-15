@@ -10,6 +10,7 @@ use JsonSerializable;
  *
  * @ORM\Table(name="classe")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="KidzyBundle\Repository\classeRepository")
  */
 class Classe implements JsonSerializable
 {
@@ -35,18 +36,40 @@ class Classe implements JsonSerializable
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=false)
+     */
+    private $image;
+    /*
+        /**
+         * @ORM\OneToMany(targetEntity="KidzyBundle\Entity\Enfant", mappedBy="idClasse")
+         */
+    /*  private $enfants;
+
+      /**
+       * Classe constructor.
+       */
+    /* public function __construct()
+     {
+         $this->enfants =  new \Doctrine\Common\Collections\ArrayCollection();
+     }*/
 
     /**
-     * @ORM\OneToMany(targetEntity="KidzyBundle\Entity\Enfant", mappedBy="idClasse")
+     * @return string
      */
-    private $enfants;
-
-    /**
-     * Classe constructor.
-     */
-    public function __construct()
+    public function getImage()
     {
-        $this->enfants =  new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 
 
@@ -109,39 +132,6 @@ class Classe implements JsonSerializable
         return $this->description;
     }
 
-    /**
-     * Add enfant
-     *
-     * @param \KidzyBundle\Entity\Enfant $enfant
-     *
-     * @return Classe
-     */
-    public function addEnfant(\KidzyBundle\Entity\Enfant $enfant)
-    {
-        $this->enfants[] = $enfant;
-
-        return $this;
-    }
-
-    /**
-     * Remove enfant
-     *
-     * @param \KidzyBundle\Entity\Enfant $enfant
-     */
-    public function removeEnfant(\KidzyBundle\Entity\Enfant $enfant)
-    {
-        $this->enfants->removeElement($enfant);
-    }
-
-    /**
-     * Get enfant
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEnfant()
-    {
-        return $this->enfants;
-    }
 
     /**
      * @inheritDoc

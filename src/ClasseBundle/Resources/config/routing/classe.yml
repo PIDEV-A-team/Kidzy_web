@@ -25,4 +25,12 @@ classe_delete:
 classe_export:
     path:     admin/export
     defaults: { _controller: "ClasseBundle:Classe:export" }
-
+classe_all:
+    path:     /all
+    defaults: { _controller: "ClasseBundle:Classe:all" }
+classe_alle:
+    path:     /alle/{id}
+    defaults: { _controller: "ClasseBundle:Classe:alle" }
+classe_findclasse:
+    path:     /findclasse/{id}
+    defaults: { _controller: "ClasseBundle:Classe:findclasse" }

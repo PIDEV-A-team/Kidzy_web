@@ -5,8 +5,10 @@ namespace ClasseBundle\Controller;
 use KidzyBundle\Entity\Classe;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 
 /**
@@ -19,6 +21,32 @@ class ClasseController extends Controller
      * Lists all classe entities.
      *
      */
+    public function allAction()
+    {
+        $tasks = $this->getDoctrine()->getManager()
+            ->getRepository('KidzyBundle:Classe')
+            ->findAll();
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($tasks);
+        return new JsonResponse($formatted);
+    }
+    public function alleAction($id)
+    {
+        $tasks = $this->getDoctrine()->getManager()
+            ->getRepository('KidzyBundle:Enfant')
+            ->findenfant($id);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($tasks);
+        return new JsonResponse($formatted);
+    }
+    public function findclasseAction($id)
+    {
+        $tasks = $this->getDoctrine()->getManager()
+            ->getRepository('KidzyBundle:Classe')->findclasse($id);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($tasks);
+        return new JsonResponse($formatted);
+    }
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -122,7 +150,7 @@ class ClasseController extends Controller
             ->setAction($this->generateUrl('classe_delete', array('idClasse' => $classe->getIdclasse())))
             ->setMethod('DELETE')
             ->getForm()
-        ;
+            ;
     }
     public function exportAction()
     {

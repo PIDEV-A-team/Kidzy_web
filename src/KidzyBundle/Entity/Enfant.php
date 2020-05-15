@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\File;
  *
  * @ORM\Table(name="enfant", indexes={@ORM\Index(name="fk_id_p", columns={"id"}), @ORM\Index(name="fk_id_classe", columns={"id_classe"})})
  * @ORM\Entity(repositoryClass="KidzyBundle\Repository\inscriptionRepository")
+ * @ORM\Entity(repositoryClass="KidzyBundle\Repository\classeRepository")
  *
  *
  *

@@ -75,6 +75,15 @@ class PricingController extends Controller
 
         return new Response(json_encode($facture));
     }
+    public function finduserprAction($id)
+    {   $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('UserBundle:User')->find($id);
+        $enfants = $em->getRepository('KidzyBundle:Enfant')->findBy(array('idParent' => $user));
+
+        return new Response(json_encode($enfants));
+
+    }
+
 
 }
 

@@ -158,7 +158,7 @@ class Facture implements JsonSerializable
     /**
      * @return string
      */
-    public function getdue_dateFacture(): string
+    public function getdue_dateFacture()
     {
         return $this->due_dateFacture;
     }
@@ -277,7 +277,7 @@ class Facture implements JsonSerializable
                 'pack' => $this ->getPack(),
                 'total' =>$this ->getTotal(),
                 'start date facture' =>$this ->getDateFacture(),
-                'End date facture' =>$this ->getDueDateFacture(),
+                'End date facture' =>$this ->getdue_dateFacture(),
                 'paye'=>$this->getPaye(),
                 'status'=>$this->getStatus()
             ];
