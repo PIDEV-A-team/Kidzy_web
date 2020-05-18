@@ -19,3 +19,6 @@ create_facture:
 findparentpricing:
     path: /packs/parent/find/{id}
     defaults: {_controller: KidzyApiBundle:Pricing:finduserpr}
+findfacturebyenfant:
+    path: /factures/enfant/find/{id}
+    defaults: {_controller: KidzyApiBundle:Pricing:findfacturebyenfant}

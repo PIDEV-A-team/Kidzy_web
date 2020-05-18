@@ -323,7 +323,8 @@ class User extends BaseUser implements JsonSerializable
         return
             [   'id_parent' =>$this->getId(),
                 'nom_parent'   => $this->getNom(),
-                'prenom_parent' => $this->getPrenom()
+                'prenom_parent' => $this->getPrenom(),
+                'email' => $this->getEmail()
             ];
     }
 }

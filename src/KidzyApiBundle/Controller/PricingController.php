@@ -83,6 +83,14 @@ class PricingController extends Controller
         return new Response(json_encode($enfants));
 
     }
+    public function findfacturebyenfantAction($id)
+    {   $em = $this->getDoctrine()->getManager();
+        $enfant = $em->getRepository('KidzyBundle:Enfant')->find($id);
+        $factures = $em->getRepository('KidzyBundle:Facture')->findBy(array('idEnf' => $enfant));
+
+        return new Response(json_encode($factures));
+
+    }
 
 
 }
