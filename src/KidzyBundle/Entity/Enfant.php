@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * @ORM\Table(name="enfant", indexes={@ORM\Index(name="fk_id_p", columns={"id"}), @ORM\Index(name="fk_id_classe", columns={"id_classe"})})
  * @ORM\Entity(repositoryClass="KidzyBundle\Repository\inscriptionRepository")
  * @ORM\Entity(repositoryClass="KidzyBundle\Repository\classeRepository")
- *
+ * @ORM\Entity(repositoryClass="KidzyBundle\Repository\enfantRepository")
  *
  *
  * @Vich\Uploadable
@@ -462,10 +462,19 @@ class Enfant implements JsonSerializable
     {
         return
             [
-                'id'   => $this->getIdEnfant(),
-                'nom' => $this->getNomEnfant(),
-                'prenom' => $this->getPrenomEnfant(),
-                'parent' => $this ->getIdParent()
+                'IdEnfant'   => $this->getIdEnfant(),
+                'NomEnfant' => $this->getNomEnfant(),
+                'PrenomEnfant' => $this->getPrenomEnfant(),
+                'IdParent' => $this ->getIdParent(),
+                'datenEnfant' => $this ->getDatenEnfant(),
+                'facture' => $this ->getFactures(),
+                'idGarde' =>  $this ->getIdGarde(),
+                'idClasse' =>  $this ->getIdClasse(),
+                'ImageEnfant' =>  $this ->getImageEnfant(),
+                'ImageFile' =>  $this ->getImageFile(),
+                'updatedAt' => $this ->getUpdatedAt(),
+                'id'  => $this ->getId(),
+
             ];
     }
 }

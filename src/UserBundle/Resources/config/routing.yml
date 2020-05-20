@@ -7,3 +7,9 @@ admin_homepage:
 Maitresse_homepage:
     path:     /maitresse
     defaults: { _controller: UserBundle:Default:maitresse }
+user_all:
+    path:     user/all/
+    defaults: { _controller: UserBundle:Default:allUser }
+user_user:
+    path:     user/all/{username}/{password}
+    defaults: { _controller: UserBundle:Default:loginMobile }

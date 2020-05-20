@@ -9,6 +9,9 @@ use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use KidzyBundle\Repository\gardeRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class GardeController extends Controller
 {
@@ -202,17 +205,56 @@ class GardeController extends Controller
 
     public function printAction(Request $request)
     {
+        $idClasse = $request->get('idClasse');
+        $idEnfant = $request->get('idEnfant');
+        $idGarde= $request->get('idGarde');
+        $em = $this->getDoctrine()->getManager();
+        $classe = $em->getRepository('KidzyBundle:Classe')->find($idClasse);
+        $enfant = $em->getRepository('KidzyBundle:Enfant')->find($idEnfant);
+        $garde = $em->getRepository('KidzyBundle:Garde')->find($idGarde);
+        $repository = $this->getDoctrine()->getManager()->getRepository(Garde::class);
+        $listenfants=$repository->myListEnfant($idGarde);
 
 
 
-        $html = $this->renderView('@Kidzy/garde/print.html.twig', array(
-
+        $html = $this->renderView('@Kidzy/garde/printEnfant.html.twig', array(
+            'enfant'  => $enfant,
+            'classe' => $classe,
+            'garde' => $garde,
+            'listenfants' => $listenfants,
         ));
 
         return new PdfResponse(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
             'ListeEnfant.pdf'
         );
+    }
+
+    /*   public function allAction(){
+
+           $garde = $this->getDoctrine()->getManager()->getRepository('KidzyBundle:Garde')->findAll();
+           $serializer = new Serializer([new ObjectNormalizer()]);
+           $formatted = $serializer->normalize($garde);
+           return new JsonResponse($formatted);
+       }
+   */
+    public function allAction()
+    {
+        $repository = $this->getDoctrine()->getManager()->getRepository(Garde::class);
+        $listgardes=$repository->myGarde();
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($listgardes);
+        return new JsonResponse($formatted);
+
+    }
+
+    public  function findAction($idGarde){
+
+        $repository = $this->getDoctrine()->getManager()->getRepository(Garde::class);
+        $mygardes=$repository->myfindGarde($idGarde);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($mygardes);
+        return new JsonResponse($formatted);
     }
 
 

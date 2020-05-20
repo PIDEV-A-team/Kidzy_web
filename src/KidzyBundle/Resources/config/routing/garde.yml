@@ -47,5 +47,11 @@ charts:
 print_garde:
     path:     /print
     defaults: { _controller: "KidzyBundle:Garde:print" }
+all_garde:
+    path:     /gardes/all
+    defaults: { _controller: "KidzyBundle:Garde:all" }
+find_garde:
+    path:     /gardes/find/{idGarde}
+    defaults: { _controller: "KidzyBundle:Garde:find" }
 
 

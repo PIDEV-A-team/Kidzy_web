@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+<meta charset="UTF-8"/>
+<body style="font-family:Arial Unicode MS, Helvetica , Sans-Serif;">
+
+<div>
+    <a class="logo text-uppercase" href="">
+
+        <img src="{{ 'front/images/unnamed.png' | imagine_filter('thumb') }}"  alt="" class="logo-light" height="150">
+    </a>
+
+    <div align="right">
+        <div style="padding-bottom: 10px;" >
+            <strong >De</strong>
+        </div>
+        <div align="right">
+            Kidzy <br>
+            Esprit <br>
+            Tunis, Ghazela 200<br>
+            <input id="Aujourdhui" type="date" name="date" value="" readonly>
+            <script>
+                document.getElementById("Aujourdhui").valueAsDate = new Date();
+            </script>
+        </div>
+    </div>
+</div>
+
+
+
+<div align="center">
+    <div>
+        <h1>
+            <strong>Jardin d'enfant</strong>
+        </h1>
+    </div>
+    <div>
+        <h2>
+            Les coordonnées de l'enfant
+        </h2>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+
+<div >
+
+    <img src="{{ vich_uploader_asset(enfant ,'imageFile') | imagine_filter('thumb') }}" class="rounded-circle avatar-xl img-thumbnail mb-2" alt="profile-image"> <br><br><br>
+    <strong> Nom  :</strong> {{  enfant.nomEnfant }}<br><br><br>
+    <strong> Prenom  : </strong>{{  enfant.prenomEnfant }}<br><br><br>
+
+    <strong> Classe  : </strong> {{  enfant.idClasse.libelleCla }}<br><br><br>
+    <strong> Date de naissance  : </strong>{{  enfant.datenEnfant }}<br><br><br>
+    <strong> L'enfant de Mr/Mme    : </strong> {{  enfant.idParent }}   <br><br><br>
+    <strong> Inscrit dans la garderie : </strong>  {{  enfant.idGarde.nomGarde }}  <br><br><br>
+    <strong> Le numéro de téléphone de parent    : </strong>{{  enfant.idParent.tel }}<br><br><br>
+
+
+</div>
+
+
+
+</body>
+
+</html>

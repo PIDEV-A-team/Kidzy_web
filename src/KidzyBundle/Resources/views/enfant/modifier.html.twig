@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
-
+    <script src="https://js.stripe.com/v3/"></script>
 {% endblock %}
 {% block content %}
-    <section class="bg-home bg-gradient" id="home" style="background: linear-gradient(to top, #ffe6ee, #ffe2eb, #ffdee8, #ffdae4, #ffd6e1, #fed2dd, #fecfda, #fdcbd6, #fbc6d1, #fac1cd, #f8bdc8, #f6b8c3); padding-bottom: 10px !important">
+    <section class="bg-home bg-gradient" id="home" style="padding-bottom: 40px !important">
     </section>
     <section class="features" id="features">
         <div class="container-fluid">
@@ -39,76 +39,76 @@
 
                             </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-7">
-                                <p class="text-muted font-13"><strong>Image :</strong> </p>
+                            <div class="form-group">
+                                <div class="col-sm-7">
+                                    <p class="text-muted font-13"><strong>Image :</strong> </p>
 
-                                <input type ="file" class="form-control"name="imageFile"value={{ enfant.imageFile}}>
+                                    <input type ="file" class="form-control"name="imageFile"value={{ enfant.imageFile}}>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-sm-7">
+                                    <p class="text-muted font-13"><strong>Nom :</strong> </p>
+
+                                    <input type ="text" class="form-control"name="nomEnfant"value={{ enfant.nomEnfant}}>
+
+                                </div>
+
 
                             </div>
-                        </div>
-                        <div class="form-group">
+                            <div class="form-group">
 
-                            <div class="col-sm-7">
-                                <p class="text-muted font-13"><strong>Nom :</strong> </p>
+                                <div class="col-sm-7">
+                                    <p class="text-muted font-13"><strong>Prenom :</strong> </p>
 
-                                <input type ="text" class="form-control"name="nomEnfant"value={{ enfant.nomEnfant}}>
+                                    <input type ="text" class="form-control"name="prenomEnfant"value={{ enfant.prenomEnfant}}>
+
+                                </div>
+
+                            </div>
+                            {#  <div class="form-group">
+
+                                   <div class="col-sm-7">
+                                       <p class="text-muted font-13"><strong>Classe :</strong> </p>
+
+                                 <select class="form-control" id="enfant" name="idClasse">
+                                           {% for classes in classe %}
+                                               <option  value="{{ classes.idClasse }}">{{ classes.libelleCla}}</option>
+                                           {% endfor %}
+                                       </select>
+
+                                   </div>
+
+                               </div>
+                            #}
+                            <div class="form-group">
+
+                                <div class="col-sm-7">
+                                    <p class="text-muted font-13"><strong>Date de naissnace :</strong> </p>
+
+                                    <input type ="text" class="form-control"name="datenEnfant"value={{ enfant.datenEnfant}}>
+
+                                </div>
 
                             </div>
 
 
-                        </div>
-                        <div class="form-group">
+                            <div class="form-group">
 
-                            <div class="col-sm-7">
-                                <p class="text-muted font-13"><strong>Prenom :</strong> </p>
 
-                                <input type ="text" class="form-control"name="prenomEnfant"value={{ enfant.prenomEnfant}}>
+                                <input type="submit" class="btn btn-success btn-md waves-effect waves-light" value="Modifier">
+
+                                <a class="btn btn-danger waves-effect width-md waves-light" href="{{ path('enfant_supprimer',{'idEnfant': enfant.idEnfant}) }} ">
+                                    Supprimer
+                                </a>
+                                <a class="btn btn-light waves-effect waves-light mr-1" href="{{ path('enfant') }}">
+                                    Annuler
+                                </a>
+
 
                             </div>
-
-                        </div>
-                        <div class="form-group">
-
-                            <div class="col-sm-7">
-                                <p class="text-muted font-13"><strong>Classe :</strong> </p>
-
-                          <select class="form-control" id="enfant" name="idClasse">
-                                    {% for classes in classe %}
-                                        <option  value="{{ classes.idClasse }}">{{ classes.libelleCla}}</option>
-                                    {% endfor %}
-                                </select>
-
-                            </div>
-
-                        </div>
-
-                        <div class="form-group">
-
-                            <div class="col-sm-7">
-                                <p class="text-muted font-13"><strong>Date de naissnace :</strong> </p>
-
-                                <input type ="text" class="form-control"name="datenEnfant"value={{ enfant.datenEnfant}}>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-group">
-
-
-                           <input type="submit" class="btn btn-success btn-md waves-effect waves-light" value="Modifier">
-
-                            <a class="btn btn-danger waves-effect width-md waves-light" href="{{ path('enfant_supprimer',{'idEnfant': enfant.idEnfant}) }} ">
-                                   Supprimer
-                            </a>
-                            <a class="btn btn-light waves-effect waves-light mr-1" href="{{ path('enfant') }}">
-                                     Annuler
-                             </a>
-
-
-                        </div>
                         </form>
                     </div>
                     <!-- end tab-content -->
