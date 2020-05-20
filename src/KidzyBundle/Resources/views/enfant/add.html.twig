@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
-
+    <script src="https://js.stripe.com/v3/"></script>
 {% endblock %}
 {% block content %}
-    <section class="bg-home bg-gradient" id="home" style="background: linear-gradient(to top, #ffe6ee, #ffe2eb, #ffdee8, #ffdae4, #ffd6e1, #fed2dd, #fecfda, #fdcbd6, #fbc6d1, #fac1cd, #f8bdc8, #f6b8c3); padding-bottom: 10px !important">
+    <section class="bg-home bg-gradient" id="home" style="padding-bottom: 40px !important">
     </section>
-    <section class="features" id="features" style="padding-bottom: 300px !important;" >
+    <section class="features" id="features">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-8">
@@ -53,22 +53,23 @@
 
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-7">
-                                    <p class="text-muted font-13"><strong>Classe :</strong> </p>
+                            {#  <div class="form-group">
+                                   <div class="col-sm-7">
+                                       <p class="text-muted font-13"><strong>Classe :</strong> </p>
 
-                                    <select class="form-control" id="idClasse" name="idClasse">
+                                       <select class="form-control" id="idClasse" name="idClasse">
 
-                                        {% for classes in classe %}
+                                           {% for classes in classe %}
 
 
-                                            <option  value="{{ classes.idClasse }}">{{ classes.libelleCla}}</option>
-                                        {% endfor %}
+                                               <option  value="{{ classes.idClasse }}">{{ classes.libelleCla}}</option>
+                                           {% endfor %}
 
-                                    </select>
+                                       </select>
 
-                                </div>
-                            </div>
+                                   </div>
+                               </div>
+                               #}
                             <div class="form-group">
                                 <div class="col-sm-7">
 

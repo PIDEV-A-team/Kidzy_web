@@ -48,4 +48,22 @@ select id_enf , titre from facture f INNER JOIN frais_packs s on f.id_pack=s.pac
         return $query=$qb->getResult();
     }
 */
+
+    public function myGarde()
+    {
+        $qb = $this->getEntityManager()->createQuery(
+            "select g.idGarde, g.nomGarde, g.dureeGarde  from KidzyBundle:Garde g ");
+
+        return $query = $qb->getResult();
+
+    }
+    public function myfindGarde($idGarde)
+    {
+        $qb = $this->getEntityManager()->createQuery(
+            "select g.idGarde, g.nomGarde, g.dureeGarde  from KidzyBundle:Garde g where g.idGarde=:id")
+
+            ->setParameter('id', $idGarde);
+        return $query=$qb->getResult();
+
+    }
 }

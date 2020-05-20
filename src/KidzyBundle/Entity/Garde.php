@@ -150,11 +150,11 @@ class Garde
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEnfant()
+  /* public function getEnfant()
     {
         return $this->enfant;
     }
-
+*/
 
 
 }

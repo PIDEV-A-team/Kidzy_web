@@ -8,6 +8,12 @@ use KidzyBundle\Entity\Classe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use KidzyBundle\Repository\enfantRepository;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 
 class EnfantController extends Controller
 {
@@ -118,12 +124,13 @@ class EnfantController extends Controller
         ));
     }
 
-    public function enfantAction()
+    public function enfantAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $enfants = $em->getRepository('KidzyBundle:Enfant')->findAll();
+        $enfantss= $this->get('knp_paginator')->paginate($enfants, $request->query->get( 'page',  1), 3);
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-        return $this->render('@Kidzy/enfant/enfant.html.twig' , array('enfants' => $enfants ,'parent' => $user ));
+        return $this->render('@Kidzy/enfant/enfant.html.twig' , array('enfants' => $enfants ,'parent' => $user, 'enfantss' => $enfantss ));
     }
 
     public function addAction(Request $request)
@@ -131,17 +138,15 @@ class EnfantController extends Controller
         $enfant = new Enfant();
 
         $em = $this->getDoctrine()->getManager();
-        $classe = $em->getRepository('KidzyBundle:Classe')->findAll();
-
-
-
+        // $classe = $em->getRepository('KidzyBundle:Classe')->findAll();
+        // $classes = $em->getRepository('KidzyBundle:Classe')->find('idClasse');
         $user = $this->getUser();
         if ($request->isMethod("POST")) {
 
             $enfant->setImageFile($request->files->get('imageFile') );
             $enfant->setNomEnfant($request->get('nomEnfant'));
             $enfant->setPrenomEnfant($request->get('prenomEnfant'));
-            $enfant->setIdClasse(1);
+            //  $enfant->setIdClasse('idClasse');
             $enfant->setDatenEnfant($request->get('datenEnfant'));
             $enfant->setIdParent($user);
             $today = new \DateTime('now');
@@ -156,9 +161,8 @@ class EnfantController extends Controller
             return $this->redirectToRoute('enfant');
         }
 
-        return $this->render('@Kidzy/enfant/add.html.twig', array('classe' => $classe ,'enfant' => $enfant  ));
+        return $this->render('@Kidzy/enfant/add.html.twig', array('enfant' => $enfant  ));
     }
-
 
 
     public function supprimerAction($idEnfant)
@@ -177,7 +181,7 @@ class EnfantController extends Controller
 
         $em=$this->getDoctrine()->getManager();
         $enfant =$em ->getRepository(Enfant::class) ->find($id);
-        $classe = $em->getRepository('KidzyBundle:Classe')->findAll();
+        //   $classe = $em->getRepository('KidzyBundle:Classe')->findAll();
         $classes = $em->getRepository('KidzyBundle:Classe')->find('idClasse');
         if ($request->isMethod('POST')) {
             $enfant->setImageFile($request->files->get('imageFile') );
@@ -192,7 +196,7 @@ class EnfantController extends Controller
             $this->addFlash('success','Enfant modifié avec succès ');
             return $this->redirectToRoute('enfant');
         }
-        return $this->render('@Kidzy/enfant/modifier.html.twig',array('enfant'=>$enfant , 'classe' => $classe));
+        return $this->render('@Kidzy/enfant/modifier.html.twig',array('enfant'=>$enfant ));
 
     }
 /*
@@ -254,7 +258,97 @@ class EnfantController extends Controller
         }
         return ($this->render('@Kidzy/Enfant/searchEnfant.html.twig',array('parent' => $user ,'enfants' => $enfants)));
 
+    }
 
+    public function printAction(Request $request)
+    {
+
+        $idEnfant = $request->get('idEnfant');
+        $em = $this->getDoctrine()->getManager();
+
+        $enfant = $em->getRepository('KidzyBundle:Enfant')->find($idEnfant);
+
+
+        $html = $this->renderView('@Kidzy/enfant/printEnfant.html.twig', array(
+
+            'enfant'  => $enfant,
+
+
+        ));
+
+        return new PdfResponse(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            'ListeEnfant.pdf'
+        );
+    }
+
+    public  function findEAction($idEnfant){
+        $repository = $this->getDoctrine()->getManager()->getRepository(Enfant::class);
+        $myEnfant=$repository->myfindEnfant($idEnfant);
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($myEnfant);
+        return new JsonResponse($formatted);
+    }
+
+    public function allAction($idParent)
+    {
+        // $repository = $this->getDoctrine()->getManager()->getRepository(Enfant::class);
+        // $enfants=$repository->mylistEnfant($idParent);
+        // $enfants = $this->getDoctrine()->getManager()->getRepository('KidzyBundle:Enfant')->findAll();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+
+
+        //$idParent = $user->getId();
+        $repository = $this->getDoctrine()->getManager()->getRepository(Enfant::class);
+        $enfants=$repository->mylistEnfant($idParent);
+
+
+        return new Response(json_encode($enfants));
+    }
+
+    public function updateEAction(Request $request,$idEnfant )
+    {
+        $em=$this->getDoctrine()->getManager();
+
+        $enfant =$em ->getRepository(Enfant::class) ->find($idEnfant);
+        $enfant->setImageEnfant($request->get('imageEnfant'));
+        $enfant->setNomEnfant($request->get('nomEnfant'));
+        $enfant->setPrenomEnfant($request->get('prenomEnfant'));
+
+        $enfant->setDatenEnfant($request->get('datenEnfant'));
+        $em->flush();
+        return new Response(json_encode($enfant));
+    }
+
+    public function deleteEAction($idEnfant )
+    {
+        $em=$this->getDoctrine()->getManager();
+        $enfant =$em ->getRepository(Enfant::class) ->find($idEnfant);
+        $em->remove($enfant);
+        $em->flush();
+        $serializer = new Serializer([new ObjectNormalizer()]);
+        $formatted = $serializer->normalize($enfant);
+        return new JsonResponse($formatted);
+    }
+
+    public function newEAction(Request $request) {
+
+        $enfant = new Enfant();
+        $enfant->setImageEnfant($request->get('imageEnfant'));
+        $enfant->setNomEnfant($request->get('nomEnfant'));
+
+        $enfant->setPrenomEnfant($request->get('prenomEnfant'));
+
+        $enfant->setDatenEnfant($request->get('datenEnfant'));
+        // $user = $this->getUser();
+        //  $user = $this->container->get('security.token_storage')->getToken()->getUser();
+       // $enfant->setIdParent($request->get('idParent'));
+
+        $this->getDoctrine()->getManager()->persist($enfant);
+        $this->getDoctrine()->getManager()->flush();
+        // $ser = new Serializer([new JsonSerializableNormalizer()]);
+        // return new JsonResponse($ser->normalize($enfant));
+        return new Response(json_encode($enfant));
     }
 
 

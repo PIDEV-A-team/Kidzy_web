@@ -3,6 +3,8 @@
 namespace UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -65,6 +67,62 @@ class DefaultController extends Controller
 
     }
 
+    public function loginMobileAction($username, $password)
+    {
+        $user_manager = $this->get('fos_user.user_manager');
+        $factory = $this->get('security.encoder_factory');
+
+        $data = [
+            'type' => 'validation error',
+            'title' => 'There was a validation error',
+            'errors' => 'username or password invalide'
+        ];
+        $response = new JsonResponse($data, 400);
+
+
+        $user = $user_manager->findUserByUsername($username);
+        if(!$user)
+            return $response;
+
+
+        $encoder = $factory->getEncoder($user);
+
+        $bool = ($encoder->isPasswordValid($user->getPassword(),$password,$user->getSalt())) ? "true" : "false";
+        if($bool=="true")
+        {
+            $role= $user->getRoles();
+
+            $data=array('type'=>'Login succeed',
+                'id'=>$user->getId(),
+                'username'=>$user->getUsername(),
+                'password'=>$user->getPassword(),
+                'role'=>$user->getRoles());
+            $response = new JsonResponse($data, 200);
+            return $response;
+
+        }
+        else
+        {
+            return $response;
+
+        }
+        // return array('name' => $bool);
+    }
+
+    public function allUserAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $query = $em->createQuery(
+            'SELECT c
+            
+        FROM UserBundle:User c '
+        );
+        $users = $query->getArrayResult();
+        $reponse = new Response(json_encode($users));
+        $reponse->headers->set('content-Type','application/json');
+        return $reponse;
+    }
 
 
 }

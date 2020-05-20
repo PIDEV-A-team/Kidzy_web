@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block content %}
-    <section class="section bg-gradient" id="home"
-             style="background: linear-gradient(to top, #ffe6ee, #ffe2eb, #ffdee8, #ffdae4, #ffd6e1, #fed2dd, #fecfda, #fdcbd6, #fbc6d1, #fac1cd, #f8bdc8, #f6b8c3); padding-bottom: 10px !important">
+    <section class="section bg-gradient" id="home" style="padding-bottom: 0px !important">
     </section>
     <section class="section bg-light" id="pricing">
         <div class="container-fluid">
@@ -23,24 +22,25 @@
                        data-overlaySpeed="200" data-overlayColor="#36404a"><i class="mdi mdi-plus-circle-outline"></i> Ajouter votre enfant </a>
                 </div><!-- end col -->
 
-            <!-- end row -->
-                <div class="col-md-4" id="searchWrapper">
-            <li class="d-none d-sm-block right">
+                <!-- end row -->
 
-                <form class="app-search">
-                    <div class="app-search-box">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search..." name="prenomEnfant" id="prenomEnfant">
-                            <div class="input-group-append">
-                                <button class="btn" type="submit">
-                                    <i class="fe-search"></i>
-                                </button>
+                <div class="col-md-4" id="searchWrapper" align="right">
+                    <li class="d-none d-sm-block right"  >
+
+                        <form class="app-search">
+                            <div class="app-search-box">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search..." name="prenomEnfant" id="prenomEnfant">
+                                    <div class="input-group-append">
+                                        <button class="btn" type="submit">
+                                            <i class="fe-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </form>
-            </li>
-            </div>
+                        </form>
+                    </li>
+                </div>
             </div>
             {% for message in app.flashes('success') %}
 
@@ -90,7 +90,13 @@
 
                                         <p class="text-muted font-13"><strong>Nom et prénom:</strong><span class="ml-2">{{ enfant.nomEnfant}} {{ enfant.prenomEnfant }} </span></p>
 
-                                        <p class="text-muted font-13"><strong>Classe :</strong> <span class="ml-2" value=classe1> {{ enfant.idClasse.libelleCla}}</span></p>
+                                        <p class="text-muted font-13"><strong>Classe :</strong> <span class="ml-2" value=classe1>
+                                                {%  if enfant.idClasse is not null  %}
+                                                    {{ enfant.idClasse.libelleCla}}
+                                                {% else %}
+                                                    ----
+                                                {% endif %}
+                                            </span></p>
 
                                         <p class="text-muted font-13"><strong>Date de naissance :</strong> <span class="ml-2"> {{ enfant.datenEnfant }}</span></p>
                                     </div>
@@ -108,6 +114,7 @@
                 {% endfor %}
 
             </div>
+            <div class="text-center" style="">{{ knp_pagination_render(enfantss) }} </div>
         </div>
         <!-- end container-fluid -->
 

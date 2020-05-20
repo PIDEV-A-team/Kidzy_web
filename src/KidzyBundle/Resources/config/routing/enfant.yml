@@ -44,4 +44,24 @@ enfant_supprimer:
 enfant_search:
     path:     /search
     defaults: { _controller: "KidzyBundle:Enfant:search" }
+print:
+    path:     /print/ListeEnfant/{idEnfant}/
+    defaults: { _controller: "KidzyBundle:Enfant:print" }
 
+all_enf:
+    path:     /enfants/all/{idParent}
+    defaults: { _controller: "KidzyBundle:Enfant:all" }
+find_enfant:
+    path:     /enfants/findEnfant/{idEnfant}
+    defaults: { _controller: "KidzyBundle:Enfant:findE" }
+create_enfant:
+    path:       /enfants/new
+    defaults:  { _controller: "KidzyBundle:Enfant:newE" }
+
+delete_enfant:
+    path:       /enfants/delete/{idEnfant}
+    defaults:  { _controller: "KidzyBundle:Enfant:deleteE" }
+
+update_enfant:
+    path:       /enfants/update/{idEnfant}
+    defaults:  { _controller: "KidzyBundle:Enfant:updateE" }
