@@ -36,8 +36,8 @@ class DefaultController extends Controller
             ->getResult();*/
         $query = $em->createQuery(
             'SELECT f
-    FROM KidzyBundle:Facture f
-    WHERE f.status = :price'
+             FROM KidzyBundle:Facture f
+             WHERE f.status = :price'
         )->setParameter('price', 0);
 
         $result = $query->getResult();

@@ -91,6 +91,22 @@ class PricingController extends Controller
         return new Response(json_encode($factures));
 
     }
+    public function updatefactureAction($id,$paydate)
+    {
+        $Date = new \DateTime($paydate);
+        $entityManager = $this->getDoctrine()->getManager();
+        $facture = $entityManager->getRepository('KidzyBundle:Facture')->find($id);
+
+        if (!$facture) {
+            throw $this->createNotFoundException(
+                'No invoice found for id '.$id
+            );
+        }
+
+        $facture->setPayedate($Date);
+        $entityManager->flush();
+        return new Response(json_encode($facture));
+    }
 
 
 }

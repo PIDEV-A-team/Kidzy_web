@@ -22,3 +22,6 @@ findparentpricing:
 findfacturebyenfant:
     path: /factures/enfant/find/{id}
     defaults: {_controller: KidzyApiBundle:Pricing:findfacturebyenfant}
+updatefacture:
+    path: /factures/update/{id}/{paydate}
+    defaults: {_controller: KidzyApiBundle:Pricing:updatefacture}

@@ -9,7 +9,7 @@ use JsonSerializable;
  * Classe
  *
  * @ORM\Table(name="classe")
- * @ORM\Entity
+ * 
  * @ORM\Entity(repositoryClass="KidzyBundle\Repository\classeRepository")
  */
 class Classe implements JsonSerializable

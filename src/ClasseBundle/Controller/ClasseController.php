@@ -32,11 +32,11 @@ class ClasseController extends Controller
     }
     public function alleAction($id)
     {
-        $tasks = $this->getDoctrine()->getManager()
-            ->getRepository('KidzyBundle:Enfant')
-            ->findenfant($id);
+        $qb=$this->getDoctrine()->getManager()->createQuery("SELECT n.nomEnfant FROM KidzyBundle:Enfant n where n.idClasse='".$id."'");
+        $query=$qb->getResult();
+
         $serializer = new Serializer([new ObjectNormalizer()]);
-        $formatted = $serializer->normalize($tasks);
+        $formatted = $serializer->normalize($query);
         return new JsonResponse($formatted);
     }
     public function findclasseAction($id)

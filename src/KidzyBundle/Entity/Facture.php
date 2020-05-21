@@ -9,7 +9,7 @@ use JsonSerializable;
  * Facture
  *
  * @ORM\Table(name="facture", indexes={@ORM\Index(name="foreign_parent", columns={"id_parent"}), @ORM\Index(name="foreign_enfant", columns={"id_enf"}), @ORM\Index(name="foreign_pack", columns={"id_pack"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="KidzyBundle\Repository\factureRepository")
  */
 class Facture implements JsonSerializable
 {
@@ -41,6 +41,12 @@ class Facture implements JsonSerializable
      * @ORM\Column(name="due_date_facture", type="string", nullable=false)
      */
     private $due_dateFacture;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="payedate", type="date", nullable=true)
+     */
+    private $payedate;
 
     /**
      * @ORM\ManyToOne(targetEntity="Enfant", inversedBy="factures")
@@ -170,7 +176,29 @@ class Facture implements JsonSerializable
     {
         $this->due_dateFacture = $due_dateFacture;
     }
-    
+    /**
+     * Set dateFacture
+     *
+     * @param \DateTime $payedate
+     *
+     * @return Facture
+     */
+    public function setPayedate($payedate)
+    {
+        $this->payedate = $payedate;
+
+        return $this;
+    }
+
+    /**
+     * Get payedate
+     *
+     * @return \DateTime
+     */
+    public function getPayedate()
+    {
+        return $this->payedate;
+    }
 
     /**
      * Set paye
@@ -278,6 +306,7 @@ class Facture implements JsonSerializable
                 'total' =>$this ->getTotal(),
                 'start date facture' =>$this ->getDateFacture(),
                 'End date facture' =>$this ->getdue_dateFacture(),
+                'paydate' =>$this ->getPayedate(),
                 'paye'=>$this->getPaye(),
                 'status'=>$this->getStatus()
             ];
