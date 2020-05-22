@@ -75,6 +75,33 @@ class PricingController extends Controller
 
         return new Response(json_encode($facture));
     }
+    public function createnewFactureAction($idpack,$iduser,$idEnfant,$prix,$due)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $facture = new Facture();
+
+
+        $user = $em->getRepository('UserBundle:User')->find($iduser);
+
+
+        $enfant = $em->getRepository('KidzyBundle:Enfant')->find($idEnfant);
+
+
+        $pack = $em->getRepository('KidzyBundle:Pack')->find($idpack);
+
+        $facture->setDateFacture(new \DateTime());
+        $facture->setDue_dateFacture($due);
+        $facture->setPack($pack);
+        $facture->setPaye(false);
+        $facture->setTotal($prix);
+        $facture->setIdParent($user);
+        $facture->setIdEnf($enfant);
+        $facture->setStatus(0);
+        $em->persist($facture);
+        $em->flush();
+
+        return new Response(json_encode($facture));
+    }
     public function finduserprAction($id)
     {   $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('UserBundle:User')->find($id);
