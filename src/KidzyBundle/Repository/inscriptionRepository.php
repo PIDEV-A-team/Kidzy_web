@@ -30,14 +30,14 @@ class inscriptionRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQuery("select  i from KidzyBundle:Inscription i  where  i.idEnfant=:idEnfant and i.idClub=:idClub ")
 
             ->setParameter('idEnfant', $idEnfant)
-        ->setParameter('idClub', $idClub);
+            ->setParameter('idClub', $idClub);
 
         return $query = $qb->getResult();
 
     }
     public function myfinfClub($idParent)
     {
-        $qb = $this->getEntityManager()->createQuery("select i.idInscrit, c.nomClub ,e.idEnfant, e.nomEnfant , e.prenomEnfant, c.descriptionClub,c.adresseClub,c.idClub from KidzyBundle:Inscription i JOIN i.idEnfant e JOIN i.idClub c where  e.idParent<>:idParent")
+        $qb = $this->getEntityManager()->createQuery("select i.idInscrit, c.nomClub ,e.idEnfant, e.nomEnfant , e.prenomEnfant, c.descriptionClub,c.adresseClub,c.idClub from KidzyBundle:Inscription i JOIN i.idEnfant e JOIN i.idClub c where  e.idParent=:idParent")
 
             ->setParameter('idParent', $idParent);
 
@@ -54,18 +54,18 @@ class inscriptionRepository extends EntityRepository
 
 
 }
-    public function myfinfEnfant($idParent)
-    {
-        $qb = $this->getEntityManager()->createQuery("select  e.nomEnfant, e.prenomEnfant from KidzyBundle:Enfant e where  e.idParent=:idParent")
+   // public function myfinfEnfant($idParent)
+   // {
+      //  $qb = $this->getEntityManager()->createQuery("select  e.nomEnfant, e.prenomEnfant from KidzyBundle:Enfant e where  e.idParent=:idParent")
 
-            ->setParameter('idParent', $idParent);
+      //      ->setParameter('idParent', $idParent);
 
-        return $query = $qb->getResult();
+      //  return $query = $qb->getResult();
 
-    }
+  //  }
     public function myfinfClubDetails($idClub,$idEnfant,$idInscrit)
     {
-        $qb = $this->getEntityManager()->createQuery("select c.nomClub , e.nomEnfant , e.prenomEnfant, c.descriptionClub,c.adresseClub,c.idClub from KidzyBundle:Inscription i JOIN i.idEnfant e JOIN i.idClub c where i.idClub=:idClub and  i.idEnfant=:idEnfant and i.idInscrit=:idInscrit")
+        $qb = $this->getEntityManager()->createQuery("select c.nomClub , e.nomEnfant , e.prenomEnfant, c.descriptionClub,c.adresseClub,c.idClub,i.dateInscrit,i.descriptionInscrit from KidzyBundle:Inscription i JOIN i.idEnfant e JOIN i.idClub c where i.idClub=:idClub and  i.idEnfant=:idEnfant and i.idInscrit=:idInscrit")
             ->setParameter('idClub', $idClub)
             ->setParameter('idInscrit', $idInscrit)
             ->setParameter('idEnfant', $idEnfant);
@@ -94,5 +94,37 @@ class inscriptionRepository extends EntityRepository
 
         return $query = $qb->getResult();
 
+
+
     }
+    public function myfinfClubMobile($idParent)
+    {
+        $qb = $this->getEntityManager()->createQuery("select i.idInscrit, c.nomClub ,e.idEnfant, e.nomEnfant , e.prenomEnfant, c.descriptionClub,c.adresseClub,c.idClub from KidzyBundle:Inscription i JOIN i.idEnfant e JOIN i.idClub c where  e.idParent=:idParent")
+
+            ->setParameter('idParent', $idParent);
+
+        return $query = $qb->getResult();
+
+
+    }
+    public function myfinfAutreClubMobile($idParent)
+    {
+        $qb = $this->getEntityManager()->createQuery("select i.idInscrit, c.nomClub ,e.idEnfant, e.nomEnfant , e.prenomEnfant, c.descriptionClub,c.adresseClub,c.idClub from KidzyBundle:Inscription i JOIN i.idEnfant e JOIN i.idClub c where  e.idParent<>:idParent")
+
+            ->setParameter('idParent', $idParent);
+
+        return $query = $qb->getResult();
+
+
+    }
+
+    public function myfinfTestMobile($idParent)
+    {
+        $qb = $this->getEntityManager()->createQuery("select  e.idEnfant,e.nomEnfant , e.prenomEnfant from KidzyBundle:Enfant e  where  e.idParent=:idParent")
+
+            ->setParameter('idParent', $idParent);
+
+        return $query = $qb->getResult();}
+
+
 }

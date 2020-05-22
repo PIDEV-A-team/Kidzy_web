@@ -18,7 +18,7 @@
 
         <span class="card__success"><i class="mdi mdi-check text-light"></i></span>
 
-        <h1 class="card__msg">Payment Complete</h1>
+        <h1 class="card__msg">Payment is Now Complete</h1>
         <h2 class="card__submsg">Thank you for your transfer</h2>
 
         <div class="card__body">
@@ -26,11 +26,11 @@
             <img src="https://s3-ap-southeast-2.amazonaws.com/ehq-production-australia/307e5db88017e1485be238a3c00c760a0596cb59/team_members/images/000/001/701/original/male3-512.png?1461732668"
                  class="card__avatar">
             <div class="card__recipient-info">
-                <p class="card__recipient">{{ user.nom | upper }} {{ user.prenom |title }}</p>
-                <p class="card__email">{{ user.email }}</p>
+                <p class="card__recipient">{{ facture.idParent.nom | upper }} {{ facture.idParent.prenom |title }}</p>
+                <p class="card__email">{{ facture.idParent.email }}</p>
             </div>
 
-            <h1 class="card__price">{{ prix }}<span>DT</span></h1>
+            <h1 class="card__price">{{ facture.total }}<span>DT</span></h1>
 
             <p class="card__method">Details Achat</p>
             <div class="card__payment">
@@ -38,17 +38,17 @@
                     <i class="pe-7s-note2 h1"></i>
                 </div>
                 <div class="card__card-details">
-                    <p class="card__card-type">{{ pack.nomPack }}</p>
-                    {% for frai in pack.frais %}
+                    <p class="card__card-type">{{ facture.pack.nomPack }}</p>
+                    {% for frai in facture.pack.frais %}
                         <p class="card__card-number">{{ frai.titre }}</p>
                     {% endfor %}
                     <p class="card__card-type">Enfant :</p>
-                    <p class="card__card-number">{{ enfant.nomEnfant }} {{ enfant.prenomEnfant }}</p>
+                    <p class="card__card-number">{{ facture.idEnf.nomEnfant }} {{ facture.idEnf.prenomEnfant }}</p>
                 </div>
             </div>
 
         </div>
-        <a href="{{ path('printfacture' , { 'idPack': pack.idPack , 'idEnfant': enfant.idEnfant , 'idParent': user.id , 'idFacture': facture.idFacture,'prix':prix,'end':due } ) }}" class="btn btn-dark ">Imprimer</a>
+        <a href="{{ path('printfacture' , { 'idPack': facture.pack.idPack , 'idEnfant': facture.idEnf.idEnfant , 'idParent': facture.idParent.id , 'idFacture': facture.idFacture,'prix':facture.total,'end': facture.due_dateFacture } ) }}" class="btn btn-dark ">Imprimer</a>
         <a href="{{ path('attachment') }}"  class="btn btn-primary ">Retour</a>
     </div>
 

@@ -128,6 +128,14 @@ class Inscription
     {
         $this->idEnfant = $idEnfant;
     }
+    /**
+     * @param \integer $idEnfant
+     */
+    public function setEnfant($idEnfant)
+    {
+        $this->idEnfant = $idEnfant;
+    }
+
 
     /**
      * @return \Club

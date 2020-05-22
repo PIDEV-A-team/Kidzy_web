@@ -28,3 +28,12 @@ findfacturebyenfant:
 updatefacture:
     path: /factures/update/{id}/{paydate}
     defaults: {_controller: KidzyApiBundle:Pricing:updatefacture}
+mailpay:
+    path: /factures/payment/{id}/{iduser}
+    defaults: {_controller: KidzyApiBundle:Pricing:sendmail}
+updatepaye:
+    path:     /facture/payment/{idfacture}/{idPack}/{amount}/{due}/buy
+    defaults: { _controller: KidzyApiBundle:Pricing:payupdate}
+updatesuccess:
+    path:     /facture/payment/success/{idfacture}/{idPack}/{idEnfant}/{prix}/{end}/{session_id}
+    defaults: { _controller: KidzyApiBundle:Pricing:updateinvoicesuccess }

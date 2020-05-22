@@ -153,7 +153,7 @@ class PackController extends Controller
         $pack = $em->getRepository('KidzyBundle:Pack')->find($id);
         $enfant = $em->getRepository('KidzyBundle:Enfant')->find($idEnfant);
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-        $idParent = $user->getId();
+
 
         \Stripe\Stripe::setApiKey('sk_test_8TNB5HaJ0H5lWP5qMso3OWDI00syLPhFY3');
 

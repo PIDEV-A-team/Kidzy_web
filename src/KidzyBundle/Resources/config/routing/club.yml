@@ -35,3 +35,30 @@ print_club:
     path:     front/{idEnfant}/{idInscrit}/{idClub}/print
     defaults: { _controller: KidzyBundle:Club:print }
     methods:  GET
+club_all:
+    path:     /all/
+    defaults: { _controller: KidzyBundle:Club:allClub }
+club_all_mobile:
+    path:     /MesClubs/{idParent}
+    defaults: { _controller: KidzyBundle:Club:indexParentMobile }
+club_details_mobile:
+    path:     /Details/{idInscrit}/{idClub}/{idEnfant}
+    defaults: { _controller: KidzyBundle:Club:showParentMobile }
+club_Autre_mobile:
+    path:     /AutresClubs/
+    defaults: { _controller: KidzyBundle:Club:indexAutreMobile }
+club_deleteMobile:
+    path:     Quitter/{idInscrit}/
+    defaults: { _controller: KidzyBundle:Club:deleteMobile }
+Enfant_Mobile:
+    path:    enfant/{idParent}/
+    defaults: { _controller: KidzyBundle:Club:EnfantMobile }
+New_Mobile:
+    path:    New
+    defaults: { _controller: KidzyBundle:Club:InsertMobile }
+StatMobile:
+    path:    stat
+    defaults: { _controller: KidzyBundle:Club:StatMobile }
+PrintMobile:
+    path:    print/{idInscrit}/{idClub}/{idEnfant}
+    defaults: { _controller: KidzyBundle:Club:printMobile }

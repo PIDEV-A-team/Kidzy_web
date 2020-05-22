@@ -35,7 +35,7 @@ buy:
 success_payment:
     path:     /success/{idPack}/{idEnfant}/{prix}/{end}/{session_id}
     defaults: { _controller: "KidzyBundle:Pack:success" }
-print:
+printfacture:
     path:     /print/{idPack}/{idEnfant}/{idParent}/{idFacture}/{prix}/{end}
     defaults: { _controller: "KidzyBundle:Pack:print" }
 count:

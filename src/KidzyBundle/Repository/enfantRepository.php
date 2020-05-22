@@ -9,7 +9,17 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\Tests\OrmFunctionalTestCase;
 
 class enfantRepository extends EntityRepository
+
 {
+    public function myfinfEnfant($idParent)
+    {
+        $qb = $this->getEntityManager()->createQuery("select  e.nomEnfant, e.prenomEnfant from KidzyBundle:Enfant e where  e.idParent=:idParent")
+
+            ->setParameter('idParent', $idParent);
+
+        return $query = $qb->getResult();
+
+    }
     public function myEnfant()
     {
         $qb=$this->getEntityManager()->createQuery("select e from KidzyBundle:Enfant e Where e.prenomEnfant = 'sonia' " );

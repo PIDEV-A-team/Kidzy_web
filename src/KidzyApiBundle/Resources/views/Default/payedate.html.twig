@@ -1,0 +1,11 @@
+{# app/Resources/views/Emails/registration.html.twig #}
+<h3>Thank you for your subscription!</h3>
+<h4>Hi {{ facture.idParent.nom }} {{ facture.idParent.prenom }}! Please complete your payment before {{ facture.payedate |localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y") }} </h4>
+
+
+<h6><a href="http://localhost/kidzy_web/web/app_dev.php/api/facture/payment/{{ facture.idFacture }}/{{ facture.pack.idPack }}/{{ facture.total }}/{{ facture.due_dateFacture}}/buy?enfant={{ facture.idEnf.idEnfant }}">
+        Payer avec Stripe</a>  Thanks!</h6>
+
+<img src="{{ img }}" width="300"  alt="logo_du_louvre">
+
+
