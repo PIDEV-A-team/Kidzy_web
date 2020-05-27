@@ -4,9 +4,15 @@ namespace KidzyBundle\Controller;
 
 use KidzyBundle\Entity\Avis;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use KidzyBundle\Form\AvisType;
-
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony \ Component \ Serializer \ Normalizer \ JsonSerializableNormalizer;
+use UserBundle\Entity\User;
 
 
 /**
@@ -22,15 +28,18 @@ class AvisController extends Controller
 
         $avis = $em->getRepository('KidzyBundle:Avis')->findAll();
 
-        return $this->render('@Kidzy/avis/index.html.twig', array(
-            'avis' => $avis,
-        ));
+        return $this->render(
+            '@Kidzy/avis/index.html.twig',
+            array(
+                'avis' => $avis,
+            )
+        );
     }
+
     public function newAction(Request $request)
     {
 
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-
 
 
         $avis = new Avis();
@@ -44,19 +53,23 @@ class AvisController extends Controller
             $em->persist($avis);
             $em->flush();
 
-            return $this->redirectToRoute('Mesavis',array("avis"=>$avis));
+            return $this->redirectToRoute('Mesavis', array("avis" => $avis));
         }
-        return $this->render('@Kidzy/avis/new.html.twig', array('form'=>$form->createView()));
+
+        return $this->render('@Kidzy/avis/new.html.twig', array('form' => $form->createView()));
     }
 
     public function showAction(Avis $avi)
     {
         $deleteForm = $this->createDeleteForm($avi);
 
-        return $this->render('@Kidzy/avis/show.html.twig', array(
-            'avi' => $avi,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            '@Kidzy/avis/show.html.twig',
+            array(
+                'avi' => $avi,
+                'delete_form' => $deleteForm->createView(),
+            )
+        );
     }
 
     public function deleteAction(Request $request, Avis $avi)
@@ -74,15 +87,12 @@ class AvisController extends Controller
     }
 
 
-
-
     private function createDeleteForm(Avis $avi)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('avis_delete', array('idAvis' => $avi->getIdAvis())))
             ->setMethod('DELETE')
-            ->getForm()
-            ;
+            ->getForm();
     }
 
     public function avisFAction(Request $request)
@@ -90,14 +100,17 @@ class AvisController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $avis = $em->getRepository('KidzyBundle:Avis')->findAll();
-        $aviss= $this->get('knp_paginator')->paginate($avis, $request->query->get( 'page',  1), 3);
+        $aviss = $this->get('knp_paginator')->paginate($avis, $request->query->get('page', 1), 3);
 
-        return $this->render('@Kidzy/avis/avisF.html.twig', array(
-            'avis' => $avis,
-            'avis' => $aviss,
-       
+        return $this->render(
+            '@Kidzy/avis/avisF.html.twig',
+            array(
+                'avis' => $avis,
+                'avis' => $aviss,
 
-        ));
+
+            )
+        );
     }
 
     public function MesavisAction(Request $request)
@@ -105,28 +118,30 @@ class AvisController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $avis = $em->getRepository('KidzyBundle:Avis')->findAll();
-        $aviss= $this->get('knp_paginator')->paginate($avis, $request->query->get( 'page',  1), 3);
-        return $this->render('@Kidzy/avis/Mesavis.html.twig', array('parent' => $user,
-            'avis' => $avis,
-            'avis' => $aviss,
+        $aviss = $this->get('knp_paginator')->paginate($avis, $request->query->get('page', 1), 3);
+
+        return $this->render(
+            '@Kidzy/avis/Mesavis.html.twig',
+            array(
+                'parent' => $user,
+                'avis' => $avis,
+                'avis' => $aviss,
 
 
-
-
-        ));
+            )
+        );
     }
 
     public function supprimerAction($idAvis)
     {
 
-        $em=$this->getDoctrine()->getManager();
-        $avis =$em ->getRepository(Avis::class) ->find($idAvis);
+        $em = $this->getDoctrine()->getManager();
+        $avis = $em->getRepository(Avis::class)->find($idAvis);
         $em->remove($avis);
         $em->flush();
-        return $this->redirectToRoute("Mesavis" );
+
+        return $this->redirectToRoute("Mesavis");
     }
-
-
 
 
     public function editAction(Request $request, Avis $avis)
@@ -142,16 +157,121 @@ class AvisController extends Controller
             return $this->redirectToRoute('Mesavis', array('idAvis' => $avis->getIdAvis()));
         }
 
-        return $this->render('@Kidzy/avis/edit.html.twig', array(
-            'avis' => $avis,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            '@Kidzy/avis/edit.html.twig',
+            array(
+                'avis' => $avis,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+            )
+        );
+    }
+
+    public function allAvisAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $avis = $em->getRepository('KidzyBundle:Avis')->findAll();
+
+        return new Response(json_encode($avis));
+
+    }
+
+    public function MesAvisMobileAction($idParent)
+    {
+
+
+        //$user = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        $repository = $this->getDoctrine()->getManager()->getRepository(Avis::class);
+        $avis = $repository->mylistAvis($idParent);
+
+        return new Response(json_encode($avis));
     }
 
 
+    public function getuserAction($idParent)
+    {
 
 
+        //$user = $this->container->get('security.token_storage')->getToken()->getUser();
 
+        $repository = $this->getDoctrine()->getManager()->getRepository(User::class)->find($idParent);
+
+        return new Response(json_encode($repository));
+    }
+
+    public function ajoutAvisAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $idUser = $request->get('idUser');
+        $user = $em->getRepository('UserBundle:User')->find($idUser);
+
+        //$user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $avis = new Avis();
+        $avis->setDescriptionAvis($request->get('descriptionAvis'));
+        $avis->setDateAvis(new \DateTime('now'));
+        $avis->setId($user);
+
+        // $user = $this->getUser();
+        //  $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        // $enfant->setIdParent($request->get('idParent'));
+        try {
+
+            $em->persist($avis);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $data = [
+                'title' => 'Erreur',
+                'message' => 'Erreur',
+                'errors' => $ex->getMessage()
+            ];
+            $response = new JsonResponse($data, 400);
+
+            return $response;
+        }
+
+        return $this->json(array('title' => 'successful', 'message' => " successfully"), 200);
+
+    }
+
+
+    public function updateAvisMobileAction(Request $request, $idAvis)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+
+        $avis = $em->getRepository(Avis::class)->find($idAvis);
+        $avis->setDescriptionAvis($request->get('descriptionAvis'));
+        $avis->setDateAvis(new \DateTime('now'));
+        try {
+
+            $em->persist($avis);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $data = [
+                'title' => 'Erreur',
+                'message' => 'Erreur',
+                'errors' => $ex->getMessage()
+            ];
+            $response = new JsonResponse($data, 400);
+
+            return $response;
+        }
+
+        return $this->json(array('title' => 'successful', 'message' => " successfully"), 200);
+
+
+    }
+
+    public function suppAvisAction($idAvis)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $avis = $em->getRepository(Avis::class)->find($idAvis);
+        $em->remove($avis);
+        $em->flush();
+
+        return $this->json(array('title' => 'successful', 'message' => "Avis supprimé"), 200);
+    }
 }
-

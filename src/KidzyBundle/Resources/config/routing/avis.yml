@@ -35,7 +35,28 @@ Mesavis:
 avis_supprimer:
     path:     /{idAvis}/supprimer
     defaults: { _controller: "KidzyBundle:Avis:supprimer" }
+allAvis:
+    path:     /allAvis
+    defaults: { _controller: "KidzyBundle:Avis:allAvis" }
 
+MesAvisMobile:
+    path:     /MesAvisMobile/{idParent}
+    defaults: { _controller: "KidzyBundle:Avis:MesAvisMobile" }
 
+updateAvisMobile:
+    path:     /updateAvisMobile/{idAvis}
+    defaults: { _controller: "KidzyBundle:Avis:updateAvisMobile" }
+
+ajoutAvis:
+    path:     /ajoutAvis
+    defaults: { _controller: "KidzyBundle:Avis:ajoutAvis" }
+
+suppAvis:
+    path:     /suppAvis/{idAvis}
+    defaults: { _controller: "KidzyBundle:Avis:suppAvis" }
+
+getUser:
+    path:     /Avis/{idParent}
+    defaults: { _controller: "KidzyBundle:Avis:getuser" }
 
 

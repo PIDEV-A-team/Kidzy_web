@@ -18,4 +18,17 @@ class reclamationsRepository extends EntityRepository
 
     }
 
+
+    public function mylistRec($idParent)
+    {
+        $qb = $this->getEntityManager()->createQuery(
+            "select r.idRec ,  r.dateRec , r.descriptionRec 
+             from KidzyBundle:Reclamations r 
+             WHERE  r.id=:id")
+            ->setParameter('id', $idParent);
+        return $query = $qb->getResult();
+
+    }
+
+
 }

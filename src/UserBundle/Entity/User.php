@@ -10,8 +10,9 @@ use JsonSerializable;
 
 /**
 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="KidzyBundle\Repository\userRepository")
  * @ORM\Table(name="fos_user")
+ *
  */
 class User extends BaseUser implements JsonSerializable
 {

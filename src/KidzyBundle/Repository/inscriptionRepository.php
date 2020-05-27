@@ -118,13 +118,7 @@ class inscriptionRepository extends EntityRepository
 
     }
 
-    public function myfinfTestMobile($idParent)
-    {
-        $qb = $this->getEntityManager()->createQuery("select  e.idEnfant,e.nomEnfant , e.prenomEnfant from KidzyBundle:Enfant e  where  e.idParent=:idParent")
 
-            ->setParameter('idParent', $idParent);
-
-        return $query = $qb->getResult();}
 
 
 }

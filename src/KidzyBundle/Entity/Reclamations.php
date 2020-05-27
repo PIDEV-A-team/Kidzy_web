@@ -3,15 +3,16 @@
 namespace KidzyBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JsonSerializable;
 
 /**
  * Reclamations
  *
  * @ORM\Table(name="reclamations", indexes={@ORM\Index(name="jhjlh", columns={"id_M"}), @ORM\Index(name="id", columns={"id"})})
- *
+ * @ORM\Entity
  * @ORM\Entity(repositoryClass="KidzyBundle\Repository\reclamationsRepository")
  */
-class Reclamations
+class Reclamations implements JsonSerializable
 {
     /**
      * @var integer
@@ -244,6 +245,22 @@ class Reclamations
     {
         return $this->archive;
     }
+
+
+    public function jsonSerialize()
+    {
+        return
+            [
+                'idRec'   => $this->getIdRec(),
+                'descriptionRec' => $this->getDescriptionRec(),
+                'dateRec' => $this->getDateRec(),
+                'id' => $this ->getId(),
+                'idM' => $this ->getIdM(),
+                'reponseRec'=>$this->getReponseRec()
+
+            ];
+    }
+
 
 
 }

@@ -5,9 +5,13 @@ namespace KidzyBundle\Controller;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use KidzyBundle\Entity\Reclamations;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use KidzyBundle\Form\ReclamationsType;
 use KidzyBundle\Form\ReclamationsAType;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use UserBundle\Entity\User;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 
@@ -27,9 +31,6 @@ class ReclamationsController extends Controller
     }
 
 
-
-
-
     public function showAction(Reclamations $rec)
     {
         $deleteForm = $this->createDeleteForm($rec);
@@ -39,7 +40,6 @@ class ReclamationsController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
 
 
     public function deleteAction(Request $request, Reclamations $rec)
@@ -62,8 +62,7 @@ class ReclamationsController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('reclamations_delete', array('idRec' => $rec->getIdRec())))
             ->setMethod('DELETE')
-            ->getForm()
-            ;
+            ->getForm();
     }
 
     public function editAction(Request $request, Reclamations $rec)
@@ -86,24 +85,22 @@ class ReclamationsController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     public function MesRecAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $rec = $em->getRepository('KidzyBundle:Reclamations')->findAll();
-        $recc= $this->get('knp_paginator')->paginate($rec, $request->query->get( 'page',  1), 2);
+        $recc = $this->get('knp_paginator')->paginate($rec, $request->query->get('page', 1), 2);
         return $this->render('@Kidzy/reclamations/Mesrec.html.twig', array(
             'parent' => $user,
             'rec' => $rec,
             'rec' => $recc,
 
 
-
-
-
-
         ));
     }
+
     public function newAction(Request $request)
     {
         {
@@ -111,15 +108,15 @@ class ReclamationsController extends Controller
             $reclamation = new Reclamations();
             $form = $this->createForm('KidzyBundle\Form\ReclamationsAType', $reclamation);
             $form->handleRequest($request);
-            $em=$this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $reclamation->setId($user);
                 $today = new \DateTime('now');
-                $reclamation ->setDateRec($today);
-                $reclamation ->setEtatRec("non");
-                $reclamation ->setReponseRec(" ");
-                $reclamation ->setArchive("non archiver");
+                $reclamation->setDateRec($today);
+                $reclamation->setEtatRec("non");
+                $reclamation->setReponseRec(" ");
+                $reclamation->setArchive("non archiver");
                 $em->persist($reclamation);
                 $em->flush();
 
@@ -131,6 +128,7 @@ class ReclamationsController extends Controller
 
 
     }
+
     public function printAction(Request $request)
     {
 
@@ -140,10 +138,8 @@ class ReclamationsController extends Controller
         $reclamation = $em->getRepository('KidzyBundle:Reclamations')->find($idRec);
 
 
-
-
         $html = $this->renderView('@Kidzy/reclamations/print.html.twig', array(
-            'reclamation'  => $reclamation,
+            'reclamation' => $reclamation,
 
 
         ));
@@ -159,17 +155,17 @@ class ReclamationsController extends Controller
         $pieChart = new PieChart();
         $em = $this->getDoctrine()->getManager();
 
-        $reclamation= $em->getRepository('KidzyBundle:Reclamations')->findAll();
-        $repository= $this->getDoctrine()->getManager()->getRepository(Reclamations::class);
-        $listes= $repository->myfindrec();
-        $data=array();
-        $a=['etatRec','NB'];
-        array_push($data,$a);
-        foreach($listes as $c){
-            $a=array($c['etatRec'],$c['NB']);
-            array_push($data,$a);
+        $reclamation = $em->getRepository('KidzyBundle:Reclamations')->findAll();
+        $repository = $this->getDoctrine()->getManager()->getRepository(Reclamations::class);
+        $listes = $repository->myfindrec();
+        $data = array();
+        $a = ['etatRec', 'NB'];
+        array_push($data, $a);
+        foreach ($listes as $c) {
+            $a = array($c['etatRec'], $c['NB']);
+            array_push($data, $a);
 
-    }
+        }
         $pieChart->getData()->setArrayToDataTable(
             $data
         );
@@ -183,16 +179,77 @@ class ReclamationsController extends Controller
         $pieChart->getOptions()->getTitleTextStyle()->setFontSize(20);
 
 
-
-
         return $this->render('@Kidzy/reclamations/chartsR.html.twig', array('piechart' => $pieChart));
-
 
 
     }
 
+    public function AllReclamationAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $rec = $em->getRepository('KidzyBundle:Reclamations')->findAll();
 
+        return new Response(json_encode($rec));
+
+
+    }
+
+    public function MesRecMobileAction($idParent)
+    {
+
+
+        //$user = $this->container->get('security.token_storage')->getToken()->getUser();
+
+        $repository = $this->getDoctrine()->getManager()->getRepository(Reclamations::class);
+        $rec = $repository->mylistRec($idParent);
+        return new Response(json_encode($rec));
+    }
+    public function MaitresseMobileAction()
+    {
+
+
+        $repository = $this->getDoctrine()->getManager()->getRepository(User::class);
+
+
+        $details=$repository->ajoutMaitresse();
+
+        return new JsonResponse($details);
+
+
+
+    }
+    public function ajoutRecAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $idUser = $request->get('idUser');
+        $user = $em->getRepository('UserBundle:User')->find($idUser);
+        $rec = new Reclamations();
+        $rec->setDescriptionRec($request->get('descriptionRec'));
+        $rec->setDateRec(new \DateTime('now'));
+        $rec->setEtatRec("non");
+        $rec->setReponseRec(" ");
+        $rec->setArchive("non archiver");
+        $rec->setId($user);
+        // $user = $this->getUser();
+        //  $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        // $enfant->setIdParent($request->get('idParent'));
+
+        try {
+
+            $em->persist($rec);
+            $em->flush();
+        } catch (\Exception $ex) {
+            $data = [
+                'title' => 'Erreur',
+                'message' => 'Erreur',
+                'errors' => $ex->getMessage()
+            ];
+            $response = new JsonResponse($data, 400);
+            return $response;
+        }
+        return $this->json(array('title' => 'successful', 'message' => " successfully"), 200);
+
+    }
 
 
 }
-

@@ -3,16 +3,18 @@
 namespace KidzyBundle\Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * Avis
  *
  * @ORM\Table(name="avis", indexes={@ORM\Index(name="fk_id_peer", columns={"id"})})
+ * @ORM\Entity
  * @ORM\Entity(repositoryClass="KidzyBundle\Repository\avisRepository")
  *
- *
  */
-class Avis
+
+class Avis implements JsonSerializable
 {
     /**
      * @var integer
@@ -124,6 +126,19 @@ class Avis
     public function getDescriptionAvis()
     {
         return $this->descriptionAvis;
+    }
+
+
+    public function jsonSerialize()
+    {
+        return
+            [
+                'idAvis'   => $this->getIdAvis(),
+                'descriptionAvis' => $this->getDescriptionAvis(),
+                'dateAvis' => $this->getDateAvis(),
+                'id' => $this ->getId(),
+
+            ];
     }
 
 

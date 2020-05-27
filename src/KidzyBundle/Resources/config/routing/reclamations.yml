@@ -33,3 +33,17 @@ printrec:
 chartsR:
     path:     /chartsR
     defaults: { _controller: "KidzyBundle:Reclamations:chartsR" }
+AllReclamation:
+    path:     /AllReclamation
+    defaults: { _controller: "KidzyBundle:Reclamations:AllReclamation" }
+
+MesRecMobile:
+    path:     /MesRecMobile/{idParent}
+    defaults: { _controller: "KidzyBundle:Reclamations:MesRecMobile" }
+
+ajoutRec:
+    path:     /ajoutRec
+    defaults: { _controller: "KidzyBundle:Reclamations:ajoutRec" }
+MaitresseMobile:
+    path:     /MaitresseMobile
+    defaults: { _controller: "KidzyBundle:Reclamations:MaitresseMobile" }
